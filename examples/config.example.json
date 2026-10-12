@@ -1,0 +1,7 @@
+{
+  "chat_id": null,
+  "items": [
+    {"name": "Example product", "url": "https://example.com/product/1"},
+    {"name": "Shop without structured data", "url": "https://example.com/product/2", "price_regex": "class=\"price\">\\s*([0-9 ,.]+)"}
+  ]
+}
