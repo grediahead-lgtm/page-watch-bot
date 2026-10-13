@@ -95,7 +95,10 @@ class FetchTests(unittest.TestCase):
         for target in ("http://127.0.0.1:9/x", "http://169.254.169.254/latest/meta-data/", "file:///etc/passwd"):
             with self.assertRaises(urllib.error.HTTPError, msg=target) as cm:
                 handler.redirect_request(req, None, 302, "Found", {}, target)
-            cm.exception.close()
+            try:
+                cm.exception.close()
+            except KeyError:  # Python 3.9: HTTPError without a body has no file to close
+                pass
 
     def test_local_server_with_robots(self):
         class H(BaseHTTPRequestHandler):
