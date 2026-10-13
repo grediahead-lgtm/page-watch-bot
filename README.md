@@ -22,6 +22,7 @@ Tests: `python3 -m unittest discover -s tests` (a local test server is used; not
 ## Limits (read this)
 - Many shops render prices with JavaScript and publish no JSON-LD. Then you need a regex, and a regex breaks when the shop changes its HTML. This tool does not run a browser.
 - Check the shop's terms before monitoring it, and keep the interval reasonable (hours, not seconds). It is for watching a few pages you care about, not for scraping a catalog.
+- Redirects are re-checked against the same address rules, but the check resolves the name before the request, so a hostile DNS server that changes its answer in between (DNS rebinding) is not covered. Use it for shops you trust, not for arbitrary user-supplied URLs.
 - Telegram sending is a plain call to the Bot API and is not covered by an automated test against Telegram itself; use `--dry-run` first.
 
 MIT license.

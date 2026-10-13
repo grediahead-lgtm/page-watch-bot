@@ -86,6 +86,17 @@ class FetchTests(unittest.TestCase):
             with self.assertRaises(Refused, msg=url):
                 check_url(url)
 
+    def test_redirect_to_a_private_address_is_refused(self):
+        import urllib.error
+        import urllib.request
+        from page_watch.fetch import _SafeRedirects
+        handler = _SafeRedirects(False)
+        req = urllib.request.Request("https://shop.example/p")
+        for target in ("http://127.0.0.1:9/x", "http://169.254.169.254/latest/meta-data/", "file:///etc/passwd"):
+            with self.assertRaises(urllib.error.HTTPError, msg=target) as cm:
+                handler.redirect_request(req, None, 302, "Found", {}, target)
+            cm.exception.close()
+
     def test_local_server_with_robots(self):
         class H(BaseHTTPRequestHandler):
             def do_GET(self):

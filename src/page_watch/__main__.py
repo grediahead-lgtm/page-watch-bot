@@ -5,13 +5,14 @@ import sys
 import urllib.parse
 import urllib.request
 
+from .fetch import ssl_context
 from .watch import load_state, run_once, save_state
 
 
 def send_telegram(token, chat_id, text):
     data = urllib.parse.urlencode({"chat_id": chat_id, "text": text[:4000]}).encode()
     req = urllib.request.Request("https://api.telegram.org/bot%s/sendMessage" % token, data=data)
-    with urllib.request.urlopen(req, timeout=20) as r:
+    with urllib.request.build_opener(urllib.request.HTTPSHandler(context=ssl_context())).open(req, timeout=20) as r:
         if not json.loads(r.read()).get("ok"):
             raise RuntimeError("telegram refused the message")
 
